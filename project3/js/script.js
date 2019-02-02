@@ -3,6 +3,8 @@ function start() {
     let menuParent = document.querySelector(".menu"),
         menuList = document.getElementsByClassName("menu-item");
     menuParent.insertBefore(menuList[2], menuList[1]);
+    menuParent.appendChild(menuList[3].cloneNode(false));
+    menuList[4].textContent = 'Пятый пункт';
 
     document.body.style.backgroundImage = "url(./img/apple_true.jpg)";
 
