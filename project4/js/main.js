@@ -20,6 +20,10 @@ let startBtn = document.getElementById("start"),
     monthValue = document.querySelector(".month-value"),
     dayValue = document.querySelector(".day-value");
 
+    expensesItemBtn.disabled = true;
+    optionalExpensesBtn.disabled = true;
+    countBudgetBtn.disabled = true;
+
 let appData = {
     budget: 0,
     timeData: 0,
@@ -30,38 +34,45 @@ let appData = {
     moneyPerDay: 0
 };
 
-startBtn.addEventListener("click", function() {
+startBtn.addEventListener("click", function () {
     appData.timeData = new Date(Date.parse(prompt("Введите дату в формате YYYY-MM-DD")));
     appData.budget = +prompt("Ваш бюджет на месяц?");
-
     while (isNaN(appData.budget) || appData.budget == "" || appData.budget == null) {
         appData.budget = +prompt("Ваш бюджет на месяц?");
     }
     budgetValue.textContent = appData.budget;
-    yearValue.value = appData.timeData.getYear();
-    monthValue.value =  appData.timeData.getMonth();
+    yearValue.value = appData.timeData.getFullYear();
+    monthValue.value = appData.timeData.getMonth()+1;
     dayValue.value = appData.timeData.getDate();
+    expensesItemBtn.disabled = false;
+    optionalExpensesBtn.disabled = false;
+
 });
 
-expensesItemBtn.addEventListener("click", function() {
+expensesItemBtn.addEventListener("click", function () {
     let summ = 0;
     for (let i = 0; i < expensesItem.length; i++) {
         appData.expenses[expensesItem[i].value] = +expensesItem[++i].value;
         summ += +expensesItem[i].value;
     }
     expensesValue.textContent = summ;
+    countBudgetBtn.disabled = false;
 });
 
-optionalExpensesBtn.addEventListener("click", function() {
+optionalExpensesBtn.addEventListener("click", function () {
     optionalExpensesValue.textContent = "";
-    optionalExpensesItem.forEach(function(item, key) {
+    optionalExpensesItem.forEach(function (item, key) {
         appData.optionalExpenses[key] = item.value;
         optionalExpensesValue.textContent += item.value + " ";
     });
 });
 
-countBudgetBtn.addEventListener("click", function(){
-    appData.moneyPerDay = (appData.budget / 30).toFixed(1);
+countBudgetBtn.addEventListener("click", function () {
+    let expensesSum = 0;
+    for (let key in appData.expenses){
+        expensesSum += appData.expenses[key];
+    }
+    appData.moneyPerDay = ((appData.budget - expensesSum) / 30).toFixed(1);
     dayBudgetValue.textContent = appData.moneyPerDay;
 
     if (appData.moneyPerDay < 100) {
@@ -75,25 +86,26 @@ countBudgetBtn.addEventListener("click", function(){
     }
 });
 
-chooseIncome.addEventListener("input", function(){
+chooseIncome.addEventListener("input", function () {
     appData.income = chooseIncome.value.split(", ");
     incomeValue.textContent = appData.income;
 });
 
-checkboxSavings.addEventListener("click", function(){
-    if (appData.savings == false){
+checkboxSavings.addEventListener("click", function () {
+    if (appData.savings == false) {
         appData.savings = true;
     } else {
         appData.savings = false;
     }
 });
 
-chooseSum.addEventListener("input", function(){
-    if (appData.savings == true && chooseSum.value != undefined && choosePercent.value != undefined){
-            appData.monthIncome = chooseSum.value / 100 / 12 * choosePercent.value;
-            appData.yearIncome = chooseSum.value / 100 * choosePercent.value;
+function calcIncome(){
+    if (appData.savings == true && chooseSum.value != undefined && choosePercent.value != undefined) {
+        appData.monthIncome = (chooseSum.value / 100 / 12 * choosePercent.value).toFixed(2);
+        appData.yearIncome = (chooseSum.value / 100 * choosePercent.value).toFixed(2);
         monthSavingsValue.textContent = appData.monthIncome;
         yearSavingsValue.textContent = appData.yearIncome;
     }
-});
-
+}
+chooseSum.addEventListener("input", calcIncome);
+choosePercent.addEventListener("input", calcIncome);
