@@ -36,45 +36,47 @@ window.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    let deadLine = "2019-02-15T00:00:00.000+05:00";
+    let deadLine = "2019-02-15T12:00:00.000+05:00";
 
-    function getTimeRemaining(endtime){
+    function getTimeRemaining(endtime) {
         let interval = Date.parse(endtime) - Date.now();
 
         return {
-            total : interval,
-            seconds : Math.floor((interval / 1000) % 60),
-            minutes : Math.floor((interval / 1000 / 60) % 60),
-            hours : Math.floor((interval / 1000 / 60 / 60)) 
+            total: interval,
+            seconds: Math.floor((interval / 1000) % 60),
+            minutes: Math.floor((interval / 1000 / 60) % 60),
+            hours: Math.floor((interval / 1000 / 60 / 60))
         };
     }
 
-    function setClock(timerNodeId,endtime){
+    function setClock(timerNodeId, endtime) {
         let timer = document.getElementById(timerNodeId),
             seconds = timer.querySelector(".seconds"),
             minutes = timer.querySelector(".minutes"),
             hours = timer.querySelector(".hours");
-    
+
         function twoNumbers(num) {
             if (num < 10) {
                 return "0" + num;
-            }
-            else {
+            } else {
                 return "" + num;
             };
-        }    
+        }
 
-        updateClock();
         let timeIntervalId = setInterval(updateClock, 1000);
-    
+        updateClock();
         function updateClock() {
             let interval = getTimeRemaining(endtime);
+            if (interval.total <= 0) {
+                hours.textContent = "00";
+                minutes.textContent = "00";
+                seconds.textContent = "00";
+                clearInterval(timeIntervalId);
+                return;
+            }
             hours.textContent = twoNumbers(interval.hours);
             minutes.textContent = twoNumbers(interval.minutes);
             seconds.textContent = twoNumbers(interval.seconds);
-            if (interval.total <= 0) {
-                clearInterval(timeIntervalId);
-            }
         }
     }
     setClock("timer", deadLine);
