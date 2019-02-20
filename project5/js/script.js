@@ -1,6 +1,7 @@
 window.addEventListener("DOMContentLoaded", function () {
     "use strict";
 
+    //tabs
     let header = document.querySelector(".info-header"),
         tabBtn = document.querySelectorAll(".info-header-tab"),
         tabContent = document.querySelectorAll(".info-tabcontent");
@@ -36,6 +37,7 @@ window.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    //timer
     let deadLine = "2019-02-15T12:00:00.000+05:00";
 
     function getTimeRemaining(endtime) {
@@ -80,4 +82,50 @@ window.addEventListener("DOMContentLoaded", function () {
         }
     }
     setClock("timer", deadLine);
+
+    //modal window
+    let moreBtn = document.querySelector(".more"),
+        overlay = document.querySelector(".overlay"),
+        popupCloseBtn = document.querySelector(".popup-close");
+
+    function showPopup(){
+        overlay.style.display = 'block';
+        this.classList.add("more-splash");
+        document.body.style.overflow = "hidden";
+    }
+
+    moreBtn.addEventListener("click", showPopup);
+
+    function closePopup(){
+        overlay.style.display = 'none';
+        document.body.style.overflow = "";
+        let moreSplash = document.querySelectorAll(".more-splash");
+        moreSplash.forEach(function(elem){
+            elem.classList.remove("more-splash");
+        });
+    }
+
+    popupCloseBtn.addEventListener("click", closePopup);
+   
+    overlay.addEventListener("click", function(event) {
+        if (event.target === this) {
+            closePopup();
+        }
+    });
+
+    document.body.addEventListener("keydown", function(event){
+        if (event.code == "Escape") {
+            closePopup();
+        }
+    });
+
+    let info = document.querySelector(".info");
+    info.addEventListener("click", function (event) {
+        let target = event.target;
+        if (target && target.classList.contains("description-btn")) {
+             showPopup.call(target);
+        }
+    });
+
+
 });

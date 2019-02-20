@@ -20,9 +20,9 @@ let startBtn = document.getElementById("start"),
     monthValue = document.querySelector(".month-value"),
     dayValue = document.querySelector(".day-value");
 
-    expensesItemBtn.disabled = true;
-    optionalExpensesBtn.disabled = true;
-    countBudgetBtn.disabled = true;
+expensesItemBtn.disabled = true;
+optionalExpensesBtn.disabled = true;
+countBudgetBtn.disabled = true;
 
 let appData = {
     budget: 0,
@@ -42,7 +42,7 @@ startBtn.addEventListener("click", function () {
     }
     budgetValue.textContent = appData.budget;
     yearValue.value = appData.timeData.getFullYear();
-    monthValue.value = appData.timeData.getMonth()+1;
+    monthValue.value = appData.timeData.getMonth() + 1;
     dayValue.value = appData.timeData.getDate();
     expensesItemBtn.disabled = false;
     optionalExpensesBtn.disabled = false;
@@ -69,7 +69,7 @@ optionalExpensesBtn.addEventListener("click", function () {
 
 countBudgetBtn.addEventListener("click", function () {
     let expensesSum = 0;
-    for (let key in appData.expenses){
+    for (let key in appData.expenses) {
         expensesSum += appData.expenses[key];
     }
     appData.moneyPerDay = ((appData.budget - expensesSum) / 30).toFixed(1);
@@ -99,7 +99,7 @@ checkboxSavings.addEventListener("click", function () {
     }
 });
 
-function calcIncome(){
+function calcIncome() {
     if (appData.savings == true && chooseSum.value != undefined && choosePercent.value != undefined) {
         appData.monthIncome = (chooseSum.value / 100 / 12 * choosePercent.value).toFixed(2);
         appData.yearIncome = (chooseSum.value / 100 * choosePercent.value).toFixed(2);
